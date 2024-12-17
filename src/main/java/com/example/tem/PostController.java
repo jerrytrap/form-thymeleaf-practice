@@ -37,16 +37,14 @@ public class PostController {
         return getFormHtml("", "", "");
     }
 
-    @AllArgsConstructor
-    @Getter
-    @ToString
-    public static class PostWriteForm {
+    public record PostWriteForm(
         @NotBlank(message = "제목을 입력해주세요.")
         @Length(min = 5, message = "제목을 5자 이상 입력해주세요.")
-        private String title;
+        String title,
         @NotBlank(message = "내용을 입력해주세요.")
         @Length(min = 10, message = "내용을 10자 이상 입력해주세요.")
-        private String content;
+        String content
+    ) {
     }
 
     @PostMapping("/write")
@@ -64,8 +62,8 @@ public class PostController {
 
             return getFormHtml(
                     errorMessages,
-                    form.getTitle(),
-                    form.getContent()
+                    form.title,
+                    form.content
             );
         }
 
@@ -76,6 +74,6 @@ public class PostController {
                     <h2>%s</h2>
                     <p>%s</p>
                 </div>
-                """.formatted(form.getTitle(), form.getContent());
+                """.formatted(form.title, form.content);
     }
 }
