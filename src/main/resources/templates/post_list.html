@@ -1,0 +1,7 @@
+<h1>글 목록</h1>
+
+<ul th:each="post : ${posts}">
+  <li th:text="${post.title}"></li>
+</ul>
+
+<a href="/posts/write">글쓰기</a>

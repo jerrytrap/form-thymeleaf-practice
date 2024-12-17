@@ -42,23 +42,10 @@ public class PostController {
     }};
 
     @GetMapping("/list")
-    @ResponseBody
-    public String showList() {
-        String ul = "<ul>" + posts
-                .reversed()
-                .stream()
-                .map(post -> "<li>%s</li>".formatted(post.getTitle()))
-                .collect(Collectors.joining()) + "</ul>";
+    public String showList(Model model) {
+        model.addAttribute("posts", posts);
 
-        String body = """
-                <h1>글 목록</h1>
-                
-                %s
-                
-                <a href="/posts/write">글쓰기</a>
-                """.formatted(ul);
-
-        return body;
+        return "post_list";
     }
 
     @GetMapping("/write")
