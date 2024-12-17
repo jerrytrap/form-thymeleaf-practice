@@ -1,5 +1,8 @@
 <h1>글 목록</h1>
 
+<div th:if="${posts.isEmpty()}">
+  <p>등록된 글이 없습니다.</p>
+</div>
 <ul th:each="post : ${posts}">
   <li th:text="${post.title}"></li>
 </ul>

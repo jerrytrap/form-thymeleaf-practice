@@ -18,28 +18,7 @@ import java.util.stream.Collectors;
 @Controller
 @RequestMapping("/posts")
 public class PostController {
-    private List<Post> posts = new ArrayList<>() {{
-        add(
-                Post.builder()
-                        .title("제목1")
-                        .content("내용1")
-                        .build()
-        );
-
-        add(
-                Post.builder()
-                        .title("제목2")
-                        .content("내용2")
-                        .build()
-        );
-
-        add(
-                Post.builder()
-                        .title("제목3")
-                        .content("내용3")
-                        .build()
-        );
-    }};
+    private List<Post> posts = new ArrayList<>();
 
     @GetMapping("/list")
     public String showList(Model model) {
