@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
@@ -78,7 +79,8 @@ public class PostController {
     @PostMapping("/write")
     public String write(
             @ModelAttribute @Valid PostWriteForm form,
-            BindingResult bindingResult
+            BindingResult bindingResult,
+            Model model
     ) {
         if (bindingResult.hasErrors()) {
             String errorMessages = bindingResult.getAllErrors()
@@ -86,6 +88,8 @@ public class PostController {
                     .map(ObjectError::getDefaultMessage)
                     .sorted(Comparator.reverseOrder())
                     .collect(Collectors.joining("<br>"));
+
+            model.addAttribute("errorMessage", errorMessages);
 
             return "post_write";
         }
