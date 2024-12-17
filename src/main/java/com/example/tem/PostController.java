@@ -3,6 +3,7 @@ package com.example.tem;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
@@ -89,8 +90,7 @@ public class PostController {
     }
 
     @PostMapping("/write")
-    @ResponseBody
-    public String write(
+    public ResponseEntity<String> write(
             @ModelAttribute @Valid PostWriteForm form,
             BindingResult bindingResult
     ) {
@@ -101,20 +101,21 @@ public class PostController {
                     .sorted(Comparator.reverseOrder())
                     .collect(Collectors.joining("<br>"));
 
-            return getFormHtml(
-                    errorMessages,
-                    form.title,
-                    form.content
-            );
+            return ResponseEntity
+                    .badRequest()
+                    .body(getFormHtml(errorMessages, form.title, form.content));
         }
 
-        return """
-                <h1>글쓰기 완료</h1>
-                
-                <div>
-                    <h2>%s</h2>
-                    <p>%s</p>
-                </div>
-                """.formatted(form.title, form.content);
+        posts.add(
+                Post.builder()
+                        .title(form.title)
+                        .content(form.content)
+                        .build()
+        );
+
+        return ResponseEntity
+                .status(302)
+                .header("Location", "/posts/list")
+                .build();
     }
 }
