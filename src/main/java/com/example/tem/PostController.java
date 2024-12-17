@@ -40,19 +40,6 @@ public class PostController {
         );
     }};
 
-    private String getFormHtml(String errorMessage, String title, String content) {
-        return """
-                <div>%s</div>
-                <form method="POST">
-                    <input type="text" name="title" placeholder="제목" value="%s">
-                    <br>
-                    <textarea name="content" placeholder="내용">%s</textarea>
-                    <br>
-                    <input type="submit" value="생성">
-                </form>
-                """.formatted(errorMessage, title, content);
-    }
-
     @GetMapping("/list")
     @ResponseBody
     public String showList() {
@@ -74,9 +61,8 @@ public class PostController {
     }
 
     @GetMapping("/write")
-    @ResponseBody
     public String showWrite() {
-        return getFormHtml("", "", "");
+        return "post_write";
     }
 
     public record PostWriteForm(
@@ -90,7 +76,7 @@ public class PostController {
     }
 
     @PostMapping("/write")
-    public ResponseEntity<String> write(
+    public String write(
             @ModelAttribute @Valid PostWriteForm form,
             BindingResult bindingResult
     ) {
@@ -101,9 +87,7 @@ public class PostController {
                     .sorted(Comparator.reverseOrder())
                     .collect(Collectors.joining("<br>"));
 
-            return ResponseEntity
-                    .badRequest()
-                    .body(getFormHtml(errorMessages, form.title, form.content));
+            return "post_write";
         }
 
         posts.add(
@@ -113,9 +97,6 @@ public class PostController {
                         .build()
         );
 
-        return ResponseEntity
-                .status(302)
-                .header("Location", "/posts/list")
-                .build();
+        return "redirect:/posts/list";
     }
 }
