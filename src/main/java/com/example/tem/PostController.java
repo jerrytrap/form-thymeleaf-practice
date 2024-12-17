@@ -62,7 +62,9 @@ public class PostController {
     }
 
     @GetMapping("/write")
-    public String showWrite() {
+    public String showWrite(
+            @ModelAttribute("form") PostWriteForm form
+    ) {
         return "post_write";
     }
 
@@ -78,7 +80,7 @@ public class PostController {
 
     @PostMapping("/write")
     public String write(
-            @ModelAttribute @Valid PostWriteForm form,
+            @ModelAttribute("form") @Valid PostWriteForm form,
             BindingResult bindingResult,
             Model model
     ) {
@@ -90,8 +92,6 @@ public class PostController {
                     .collect(Collectors.joining("<br>"));
 
             model.addAttribute("errorMessage", errorMessages);
-            model.addAttribute("title", form.title);
-            model.addAttribute("content", form.content);
 
             return "post_write";
         }
