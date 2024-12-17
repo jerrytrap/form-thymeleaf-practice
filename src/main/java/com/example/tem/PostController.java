@@ -90,6 +90,8 @@ public class PostController {
                     .collect(Collectors.joining("<br>"));
 
             model.addAttribute("errorMessage", errorMessages);
+            model.addAttribute("title", form.title);
+            model.addAttribute("content", form.content);
 
             return "post_write";
         }
