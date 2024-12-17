@@ -1,19 +1,16 @@
 package com.example.tem;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/posts")
 public class PostController {
     @GetMapping("/write")
     @ResponseBody
-    public String write() {
+    public String showWrite() {
         return """
-                <form>
+                <form action="/posts/doWrite">
                     <input type="text" name="title" placeholder="제목">
                     <br>
                     <textarea name="content" placeholder="내용"></textarea>
@@ -21,5 +18,18 @@ public class PostController {
                     <input type="submit" value="생성">
                 </form>
                 """;
+    }
+
+    @GetMapping("/doWrite")
+    @ResponseBody
+    public String write(String title, String content) {
+        return """
+                <h1>글쓰기 완료</h1>
+                
+                <div>
+                    <h2>%s</h2>
+                    <p>%s</p>
+                </div>
+                """.formatted(title, content);
     }
 }
